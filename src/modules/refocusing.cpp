@@ -464,12 +464,22 @@ void saRefocus::CPUliveView() {
 
     //initializeCPU();
 
-    if (CORNER_FLAG) {
-        LOG(INFO)<<"Using corner based homography fit method..."<<endl;
-    } else {
-        LOG(INFO)<<"Using full refractive calculation method..."<<endl;
-    }
+    //if (CORNER_FLAG) {
+    //    LOG(INFO)<<"Using corner based homography fit method..."<<endl;
+    //} else {
+    //    LOG(INFO)<<"Using full refractive calculation method..."<<endl;
+    //}
 
+    if (REF_FLAG) {
+        if (CORNER_FLAG) {
+            LOG(INFO)<<"Using corner based homography fit method..."<<endl;
+        } else {
+            LOG(INFO)<<"Using full refractive calculation method..."<<endl;
+        }
+    } else {
+        LOG(INFO)<<"Using pinhole refocusing..."<<endl;
+    }
+	
     active_frame_ = 0; thresh_ = 0;
 
     namedWindow("Live View", CV_WINDOW_AUTOSIZE);
