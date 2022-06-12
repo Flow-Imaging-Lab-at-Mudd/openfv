@@ -49,7 +49,7 @@ boost::program_options::options_description get_options() {
         ("frames", po::value<string>()->default_value(""), "Array of values in format start, end, skip")
         ("calib_file_path", po::value<string>()->default_value(""), "calibration file to use")
         ("images_path", po::value<string>()->default_value(""), "path where data is located")
-        ("shifts", po::value<string>()->default_value(""), "path where data is located")
+        ("shifts", po::value<string>()->default_value(""), "coordinate shifts for refocusing")
         ("resize_images", po::value<int>()->default_value(0), "ON to resize all input images")
         ("rf", po::value<double>()->default_value(1.0), "Factor to resize input images by")
         ("undistort", po::value<int>()->default_value(0), "ON to undistort images")
