@@ -109,7 +109,7 @@ function [velocityStruct] = PIV_3d_matlab(fieldA, fieldB, dt, pivOpts)
 
 
 % Initialise the results structure
-emptycell      = cell(pivOpts.npasses,1);
+emptycell      = cell(pivOpts.nPasses,1);
 velocityStruct = struct('ux',           emptycell, ...
                         'uy',           emptycell, ...
                         'uz',           emptycell, ...
@@ -130,21 +130,21 @@ nvox_Z = size(fieldA,3);
 
 %% LOOP FOR DIFFERENT PASSES
 
-for pass = 1:pivOpts.npasses
+for pass = 1:pivOpts.nPasses
     
     % DIsplay progress
-    disp(['PIV_3d_matlab.m: Pass ' num2str(pass) ' of ' num2str(pivOpts.npasses)])
+    disp(['PIV_3d_matlab.m: Pass ' num2str(pass) ' of ' num2str(pivOpts.nPasses)])
     
     
     
     % SORT WINDOW DISCRETISATION
     
     % Window sizes for current pass...
-    wsize = pivOpts.wsize(pass,:);
+    wsize = pivOpts.wSize(pass,:);
     
     % Get window centre coords in X, Y, Z
-    min_coord = wsize/2 + 0.5 + pivOpts.edge_cut;
-    max_coord = [nvox_X nvox_Y nvox_Z] - wsize/2 +0.5 - pivOpts.edge_cut;
+    min_coord = wsize/2 + 0.5 + pivOpts.edgeCut;
+    max_coord = [nvox_X nvox_Y nvox_Z] - wsize/2 +0.5 - pivOpts.edgeCut;
     win_spacing = wsize * (1 - (pivOpts.overlap(pass)/100));
     win_ctrs_x = min_coord(1):win_spacing(1):max_coord(1);
     win_ctrs_y = min_coord(2):win_spacing(2):max_coord(2);

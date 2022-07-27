@@ -37,12 +37,18 @@ overlap = [yaml_data.overlap{1,1}, yaml_data.overlap{1,2}, ...
            yaml_data.overlap{3,1}, yaml_data.overlap{3,2}, ...
            yaml_data.overlap{3,3}];
 
+if (isfield(yaml_data, 'algorithm'))
+    algorithm = yaml_data.algorithm; % to do: add checks for valid algorithms
+else
+    algorithm = 'fmexpar';
+end
+
 
 pivOpts = definePIVOptions('nPasses', nPasses, ...
                            'wSize', wSize, ...
                            'overlap', overlap, ...
                            'fetchType', [3 3 3], ...
-                           'algorithm', 'fmexpar', ...
+                           'algorithm', algorithm, ...
                            'edgeCut', 100);
 
 % get directories in folder
@@ -67,6 +73,13 @@ if (isfield(yaml_data, 'start_frame'))
     end_frame = yaml_data.end_frame;
 end
 
+if (isfield(yaml_data, 'img_type'))
+    im_type = yaml_data.img_type;
+else
+    im_type = '.tif';
+    warning(['Image type not specified, using default of .tif'])
+end
+
 for i = start_frame:end_frame
 
     frames = {datasets(i).name, datasets(i+1).name};
@@ -83,7 +96,7 @@ for i = start_frame:end_frame
     
     try
         
-        velocityField = runPIV(data_path, frames, pivOpts, f, dt);
+        velocityField = runPIV(data_path, frames, pivOpts, f, dt, im_type);
 
         mkdir(results_path);
         save([results_path '/3DPIV_results.mat'], ...

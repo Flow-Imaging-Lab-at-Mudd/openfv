@@ -1,12 +1,16 @@
 % Function to read data in specified format from path variable and
 % then run PIV based on other specified settings
 
-function velocityField = runPIV(data_path, frames, pivOpts, f, dt)
+function velocityField = runPIV(data_path, frames, pivOpts, f, dt,varargin)
+
+if exist("varargin")
+    im_type = varargin{1};
+end
 
 for j=1:2
 
     tmp_path = [data_path frames{j} '/'];
-    imn1 = dir([tmp_path '*.tif']);
+    imn1 = dir([tmp_path '*' im_type]);
 
     if j==1
         img = imread([tmp_path imn1(1).name]);
