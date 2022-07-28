@@ -887,7 +887,7 @@ string fileIO::getFilename(string filename) {
 
 // imageIO class allows writing of a single image or a sequence of
 // images to a certain path
-imageIO::imageIO(string path) {
+imageIO::imageIO(string path) { 
 
     DIR *dir;
     struct dirent *ent;
@@ -918,7 +918,7 @@ imageIO::imageIO(string path) {
             dir_path_ = path + "/";
         }
 
-        VLOG(1)<<"Successfully initialized image writer in "<<dir_path_;
+        VLOG(1)<<"Successfully initialized image writer in "<<dir_path_<<" using default type";
 
         int files=0;
         while(ent = readdir(dir)) {
@@ -935,11 +935,63 @@ imageIO::imageIO(string path) {
     counter_ = 1;
     prefix_ = string("");
 
-    // B: OpenCV 3 had some issues with this, so will change to .png for now
-    //ext_ = ".tif";
-    ext_ = ".png";
+    ext_ = ".tif";
+    //ext_ = ".png";
 
 }
+
+imageIO::imageIO(string path, string type) {
+  
+    DIR *dir;
+    struct dirent *ent;
+    string slash = "/";
+
+    dir = opendir(path.c_str());
+    if (!dir) {
+
+        LOG(INFO)<<"Could not open directory "<<path;
+
+        int i=1;
+        dir_path_ = "../temp/folder001/";
+        while(opendir(dir_path_.c_str())) {
+            i++;
+            dir_path_ = "../temp/folder";
+            char buf[10];
+            sprintf(buf, "%03d", i);
+            dir_path_ += string(buf) + "/";
+        }
+        DIR_CREATED = 0;
+        LOG(INFO)<<"Redirecting output to directory "<<dir_path_;
+
+    } else {
+
+        if (string(1, path[path.length()-1]) == slash) {
+            dir_path_ = path;
+        } else {
+            dir_path_ = path + "/";
+        }
+
+        VLOG(1)<<"Successfully initialized image writer in "<<dir_path_ <<" for"<<type;
+
+        int files=0;
+        while(ent = readdir(dir)) {
+            files++;
+            if(files>2)
+                break;
+        }
+
+        if(files>2)
+            LOG(INFO)<<"Warning: "<<dir_path_<<" is not empty";
+
+    }
+
+    counter_ = 1;
+    prefix_ = string("");
+
+    ext_ = type;
+}
+
+
 
 void imageIO::operator<< (Mat img) {
 
@@ -956,7 +1008,11 @@ void imageIO::operator<< (Mat img) {
     filename<<ext_;
 
     // TODO: specify quality depending on extension
-    imwrite(filename.str(), img);
+    VLOG(4)<<"SAVING "<<filename.str();
+    Mat temp;
+    temp = img*255.0;
+    temp.convertTo(temp, CV_8UC1);
+    imwrite(filename.str(), temp);
     counter_++;
 
 }
@@ -978,7 +1034,13 @@ void imageIO::operator<< (vector<Mat> imgs) {
         filename<<ext_;
 
         // TODO: specify quality depending on extension
-        imwrite(filename.str(), imgs[i]*255.0);
+	VLOG(4)<<"SAVING "<<filename.str();
+	Mat temp;
+	temp = imgs[i]*255.0;
+	temp.convertTo(temp, CV_8UC1);
+        //imwrite(filename.str(), imgs[i]*255.0);
+	//imwrite(filename.str(), imgs[i]);
+	imwrite(filename.str(), temp);
         counter_++;
 
     }

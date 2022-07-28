@@ -1801,6 +1801,11 @@ void saRefocus::dump_stack(string path, double zmin, double zmax, double dz, dou
 
     LOG(INFO)<<"SAVING STACK TO "<<path;
 
+    if (*type.begin() != '.')
+      type='.'+type;
+      
+    VLOG(3)<<"TYPE IS "<<type;
+
     if (*path.rbegin() != '/')
         path += '/';
 
@@ -1844,7 +1849,7 @@ void saRefocus::dump_stack(string path, double zmin, double zmax, double dz, dou
         }
 
 
-        imageIO io(fn.str());
+        imageIO io(fn.str(), type);
         io<<stack; stack.clear();
 
     }
@@ -1853,7 +1858,7 @@ void saRefocus::dump_stack(string path, double zmin, double zmax, double dz, dou
 
 }
 
-void saRefocus::write_piv_settings(string path, double zmin, double zmax, double dz, double thresh) {
+void saRefocus::write_piv_settings(string path, double zmin, double zmax, double dz, double thresh, string type) {
 
     LOG(INFO)<<"SAVING PIV SETTINGS FILE IN "<<path;
 
@@ -1876,6 +1881,9 @@ void saRefocus::write_piv_settings(string path, double zmin, double zmax, double
 
     rec_out << YAML::Key << "dz";
     rec_out << YAML::Key << dz;
+
+    rec_out << YAML::Key << "img_type";
+    rec_out << YAML::Key << type;
 
     rec_out << YAML::EndMap;
 

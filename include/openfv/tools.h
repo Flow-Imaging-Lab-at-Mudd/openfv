@@ -198,6 +198,8 @@ class imageIO {
 
     imageIO(string path);
 
+    imageIO(string path, string ext);
+
     void setPrefix(string prefix);
 
     void operator<< (Mat);
