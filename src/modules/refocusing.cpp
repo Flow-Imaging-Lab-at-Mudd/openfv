@@ -1874,6 +1874,9 @@ void saRefocus::write_piv_settings(string path, double zmin, double zmax, double
     rec_out << YAML::Key << "pix_per_mm";
     rec_out << YAML::Value << scale_;
 
+    rec_out << YAML::Key << "dz";
+    rec_out << YAML::Key << dz;
+
     rec_out << YAML::EndMap;
 
     file << rec_out.c_str() << "\n\n";
