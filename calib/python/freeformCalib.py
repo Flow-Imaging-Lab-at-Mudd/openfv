@@ -74,8 +74,8 @@ def singleCamCalibMat(umeas, xworld, planeData, cameraData):
 	tcb = np.zeros((3, nplanes, ncams))
 	repErr = np.zeros((nX * nY, nplanes, ncams))
 
-	# try using initial guess for param (eventually get from config file)
-	init_f_value = 9000
+	# initial guess for param
+	init_f_value = cameraData.a0
 
 	for c in range(ncams):
 
