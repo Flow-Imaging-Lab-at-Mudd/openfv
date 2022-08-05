@@ -769,7 +769,7 @@ def reproj_error(normal_factor, img_coor, world_coor, camMatrix, rotMatrixCam, r
 	return 1 / np.sqrt(normal_factor) * np.linalg.norm(img_coor - proj_red(product))
 
 
-def saveCalibData(exptPath, camnames, p, cparams, tplanes, sceneData, camData, finalError,
+def saveCalibData(exptPath, camnames, p, cparams, tplanes, camData, finalError,
                   pix_phys, name):
 	"""
 	Save and display calibration data
@@ -926,7 +926,7 @@ if __name__ == '__main__':
 		Rt = np.column_stack((np.transpose(rotationMatsCam[:, :, c]), transVecsCam[:, c]))
 		P[:, :, c] = np.matmul(cameraMats[:, :, c], Rt)
 
-	f = saveCalibData(exptPath, camIDs, P, transVecsCam, transVecBoard, sceneData, cameraData, finalError,
+	f = saveCalibData(exptPath, camIDs, P, transVecsCam, transVecBoard, cameraData, finalError,
 	                  pix_phys, 'results_')
 	log.info('\nData saved in ' + str(f))
 
