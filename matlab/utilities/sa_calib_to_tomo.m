@@ -36,6 +36,9 @@ for cam = 1:num_cams;
     
     % NOTE: wonder if this needs to be accurate
     setup.pvr{cam} = setup.mask{cam};
+
+    % setup.a is bounds in pixels at minimum z depth
+    % setup.b is unit vectors that SOMETHING?
     
     if ref.on
         
@@ -50,7 +53,7 @@ for cam = 1:num_cams;
         setup.b{cam} = setup.b{cam}';
                 
     else
-        setup.a{cam} = back_project(points, Pmats{cam}, bounds(3,1));
+        setup.a{cam} = back_project(points, bounds(3,1), Pmats{cam});
         setup.b{cam} = calc_b(setup.a{cam}, cam_locs{cam})';
         setup.a{cam} = setup.a{cam}';
     end
