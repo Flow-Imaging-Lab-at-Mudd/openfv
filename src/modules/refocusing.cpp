@@ -2137,9 +2137,10 @@ void saRefocus::threshold_image(GpuMat &refocused) {
         Scalar mean, stdev;
         cuda::multiply(refocused, Scalar(255, 255, 255), temp); temp.convertTo(temp2, CV_8UC1);
         cuda::meanStdDev(temp2, mean, stdev);
-        VLOG(3)<<"Thresholding at: "<<mean[0]+thresh_*stdev[0];
+        VLOG(3)<<"Thresholding (Mean+Standard Deviation) at: "<<mean[0]+thresh_*stdev[0];
         cuda::threshold(refocused, refocused, (mean[0]+thresh_*stdev[0])/255, 0, THRESH_TOZERO);
     } else {
+        VLOG(3)<<"Thresholding (Exact Value) at: "<<thresh_;
         cuda::threshold(refocused, refocused, thresh_, 0, THRESH_TOZERO);
     }
 
