@@ -37,3 +37,4 @@ docs/source/latex/
 # pycache
 **/__pycache__/
 *.pyc
+*/__pycache__/*
